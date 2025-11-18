@@ -1,6 +1,5 @@
 #!/bin/bash -e
-
-# Enable jemalloc for reduced memory usage and latency.
+# Search.gov 容器入口脚本，自动设置 jemalloc，提升内存性能
 if [ -z "${LD_PRELOAD+x}" ] && [ -f /usr/lib/*/libjemalloc.so.2 ]; then
   export LD_PRELOAD="$(echo /usr/lib/*/libjemalloc.so.2)"
 fi

@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
-
+# Search.gov 开发环境启动脚本，自动安装并启动 foreman
+set -e
 if ! gem list foreman -i --silent; then
   echo "Installing foreman..."
   gem install foreman

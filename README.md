@@ -1,3 +1,98 @@
+### Ruby
+推荐使用 Ruby 3.3.x（见 Dockerfile.dev 与 Gemfile），如无特殊兼容需求。
+建议用 [RVM](https://rvm.io/) 安装 Ruby。
+### NodeJS
+推荐使用 Node.js >=20.10.0（见 package.json），建议用 [NVM](https://github.com/nvm-sh/nvm#installing-and-updating) 安装。
+
+### Docker
+推荐使用 Docker 运行本地开发环境，镜像建议 ruby:3.3.x，Node 20.10，MySQL 8，Elasticsearch 7.17。
+详细服务配置见 [searchgov-services](https://github.com/GSA/search-services)。
+应用默认端口 3100。
+常用命令：
+```bash
+$ docker compose run search-gov bash
+$ bin/rails db:setup
+```
+Elasticsearch 推荐 7.17.x，后续建议升级至 8.x，需关注 faraday 依赖兼容。
+常用检测命令：
+```bash
+$ curl localhost:9200
+```
+* [ImageMagick](https://imagemagick.org/) - 推荐用于 ActiveStorage，Paperclip 已弃用
+$ brew install mysql@8
+# 依赖迁移与弃用说明
+- Paperclip 已弃用，建议迁移至 ActiveStorage，详见 [Rails 官方文档](https://guides.rubyonrails.org/active_storage_overview.html)。
+- moment 已弃用，建议迁移至 [dayjs](https://day.js.org/) 或 [date-fns](https://date-fns.org/)。
+- sass-rails 已被 [sassc-rails](https://github.com/sass/sassc-rails) 或 [cssbundling-rails](https://github.com/rails/cssbundling-rails) 取代。
+- google_visualr 已不维护，建议评估是否可移除或替换。
+# 依赖迁移与弃用说明
+- Paperclip 已弃用，建议迁移至 ActiveStorage，详见 Rails 官方文档。
+- moment 已弃用，建议迁移至 dayjs 或 date-fns，详见各库官方迁移指南。
+- sass-rails 已被 sassc-rails 或 cssbundling-rails 取代，建议参考 Rails 7+ 官方推荐。
+- google_visualr 已不维护，建议评估是否可移除或替换。
+
+# 持续集成（CI）流程说明
+- CI 自动运行 Ruby（RSpec）和 JS（Jest）测试。
+- 自动执行 RuboCop、ESLint 静态检查。
+- 自动依赖安全检查（bundle audit、npm audit）。
+- 可在 .github/workflows/ci.yml 中自定义更多自动化任务。
+
+# 开发环境搭建步骤
+1. 安装 Ruby 3.3.x（推荐用 RVM）
+2. 安装 Node.js >=20.10.0（推荐用 NVM）
+3. 安装 MySQL 8.x、Elasticsearch 7.17.x
+4. 执行 `bundle install` 和 `npm install`
+5. 配置 .env 文件，管理敏感信息
+6. 启动服务：`bin/rails server` 或使用 Docker
+
+# 代码风格与规范
+- Ruby 代码遵循 RuboCop 推荐规范，详见 .rubocop.yml
+- JS/TS 代码遵循 ESLint 推荐规范，详见 .eslintrc.js
+- 注释需覆盖复杂逻辑和关键业务流程
+- 所有新功能需配套测试用例
+
+# 常见问题 FAQ
+**Q: 如何迁移 Paperclip 到 ActiveStorage？**
+A: 参考 Rails 官方迁移文档，逐步替换模型和上传逻辑。
+
+**Q: CI 检查未通过怎么办？**
+A: 查看 GitHub Actions 详情，修复 RuboCop/ESLint/测试/依赖安全相关问题。
+
+**Q: 如何升级依赖？**
+A: Ruby 端用 `bundle update`，Node 端用 `npm update`，并关注安全公告。
+
+# 项目优化建议
+
+## 性能优化
+- 数据库慢查询分析：建议定期 review log/production.log 或用 NewRelic/Datadog。
+- 前端生产构建：`npm run build:prod`，自动压缩 JS/CSS。
+- Ruby 端缓存：已启用 Redis 缓存。
+
+## 安全优化
+- 依赖升级：`bundle update`、`npm update`，并关注安全公告。
+- 环境变量管理：敏感信息仅存储于 `.env` 或 CI/CD 环境变量。
+- 输入校验与防护：Rails strong parameters、前端表单校验，默认启用 CSRF。
+
+## 代码质量
+- Ruby 静态检查：`bundle exec rubocop`
+- JS 静态检查：`npm run lint`
+- 测试覆盖率：`bundle exec rspec`、`npm run test:coverage`
+- 统一风格，完善注释和文档。
+
+## 依赖与主流版本说明
+- Ruby 推荐 3.3.x，见 Dockerfile.dev 与 Gemfile。
+- Node 推荐 >=20.10.0，见 package.json。
+- Rails 推荐 7.1.x，已适配。
+- Elasticsearch 推荐 7.17.x，后续建议升级至 8.x（需解决 faraday 依赖问题）。
+- MySQL 推荐 8.x，已适配。
+- 前端建议将 moment 替换为 dayjs 或 date-fns。
+- Paperclip 已弃用，建议迁移至 ActiveStorage。
+- sass-rails 已被 sassc-rails 或 cssbundling-rails 取代。
+- 部分 gem（如 google_visualr）已不维护，建议评估替换或移除。
+
+## 持续集成与自动化
+- 已集成 GitHub Actions，自动运行 Ruby/JS 测试、静态检查与依赖安全检查。
+- 推荐定期 review CI 结果，保持依赖安全与代码质量。
 # Search-gov Info
 
 ## Code Status

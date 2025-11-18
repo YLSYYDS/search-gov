@@ -1,5 +1,7 @@
-#!/usr/bin/env bash
 
+#!/usr/bin/env bash
+# Search.gov 样式构建脚本，自动编译 LESS 文件为 CSS
+set -e
 files=(application searches sites)
 
 for file in ${files[@]}; do

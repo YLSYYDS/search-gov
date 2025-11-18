@@ -1,5 +1,6 @@
-# frozen_string_literal: true
 
+# frozen_string_literal: true
+ruby '>= 3.1'
 source 'https://rubygems.org'
 
 gem 'rails', '~> 7.1.4'
@@ -180,6 +181,7 @@ group :development, :test do
   # https://github.com/amazing-print/amazing_print
   gem 'amazing_print', '~> 1.4'
   gem 'debug'
+  # Ruby 静态检查工具，提升代码质量
   gem 'rubocop',              require: false
   gem 'rubocop-performance',  require: false
   gem 'rubocop-rails',        require: false

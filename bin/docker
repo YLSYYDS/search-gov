@@ -1,5 +1,6 @@
 #!/bin/bash
-
+# Search.gov Docker 管理脚本，支持本地开发环境容器化
+set -e
 IMAGE_NAME="search-gov-dev"
 DOCKERFILE="Dockerfile.dev"
 ENV_FILE=".env.development"

@@ -1,5 +1,7 @@
-#!/usr/bin/env bash
 
+#!/usr/bin/env bash
+# Search.gov 容器安全初始化脚本，提升安全性，建议在容器启动时执行
+set -e
 # Based on Search.gov GSA Container Security Benchmark https://docs.google.com/spreadsheets/d/1_UeKZHJGF8ZfoCSnDCux5lx1fUKSFVlYE6MmmVdeS-U/edit#gid=594625648
 
 # There is no need for the container to mount volumes or devices with fstab. Removing default items reduces the attack surface.

@@ -1,0 +1,54 @@
+name: CI
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: searchgov_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent" --health-interval=10s --health-timeout=5s --health-retries=3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.10.0'
+      - name: Install dependencies
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+          npm install
+      - name: Set up database
+        run: |
+          cp config/database.yml config/database.ci.yml
+          bundle exec rails db:create db:schema:load RAILS_ENV=test
+      - name: Ruby 静态检查
+        run: bundle exec rubocop
+      - name: Ruby 依赖安全检查
+        run: |
+          gem install bundler-audit
+          bundle audit check --update
+      - name: Run Ruby tests
+        run: |
+          bundle exec rspec
+      - name: JS/TS 静态检查
+        run: npm run lint
+      - name: Node 依赖安全检查
+        run: npm audit --audit-level=moderate
+      - name: Run JS tests
+        run: |
+          npm run test:coverage

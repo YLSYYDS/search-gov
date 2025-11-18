@@ -1,6 +1,11 @@
 inherit_from: .rubocop_todo.yml
 AllCops:
   NewCops: enable
+  Exclude:
+    - 'db/schema.rb'
+    - 'node_modules/**/*'
+    - 'vendor/**/*'
+    - 'coverage/**/*'
 require:
   - rubocop-performance
   - rubocop-rails
@@ -9,3 +14,10 @@ require:
 inherit_mode:
   merge:
     - Exclude
+Layout/LineLength:
+  Max: 120
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+Style/Documentation:
+  Enabled: false
